@@ -16,10 +16,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/usesend-test.git"
+    "url": "git+https://github.com/rcdelacruz/usesend-test.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/usesend-test/issues"
+    "url": "https://github.com/rcdelacruz/usesend-test/issues"
   },
-  "homepage": "https://github.com/yourusername/usesend-test#readme"
+  "homepage": "https://github.com/rcdelacruz/usesend-test#readme"
 }
