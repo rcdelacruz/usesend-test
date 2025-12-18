@@ -1,0 +1,423 @@
+# API Examples
+
+Practical examples for using the useSend REST API in your applications.
+
+## Basic Email Sending
+
+### Send a Simple Email
+
+```bash
+curl -X POST "https://your-instance.com/api/v1/emails" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "from": "hello@yourdomain.com",
+    "to": "recipient@example.com",
+    "subject": "Hello from useSend",
+    "html": "<h1>Hello!</h1><p>This is a test email.</p>",
+    "text": "Hello! This is a test email."
+  }'
+```
+
+### Response
+
+```json
+{
+  "id": "email_abc123def456",
+  "status": "queued",
+  "from": "hello@yourdomain.com",
+  "to": ["recipient@example.com"],
+  "subject": "Hello from useSend",
+  "created_at": "2025-01-15T10:30:00Z"
+}
+```
+
+## Advanced Features
+
+### Send with Multiple Recipients
+
+```bash
+curl -X POST "https://your-instance.com/api/v1/emails" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "from": "notifications@yourdomain.com",
+    "to": ["user1@example.com", "user2@example.com"],
+    "cc": ["manager@example.com"],
+    "bcc": ["archive@yourdomain.com"],
+    "subject": "Team Update",
+    "html": "<p>Important team announcement...</p>"
+  }'
+```
+
+### Send with Attachments
+
+```bash
+curl -X POST "https://your-instance.com/api/v1/emails" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "from": "reports@yourdomain.com",
+    "to": "client@example.com",
+    "subject": "Monthly Report",
+    "html": "<p>Please find attached your monthly report.</p>",
+    "attachments": [
+      {
+        "filename": "report.pdf",
+        "content": "BASE64_ENCODED_CONTENT",
+        "contentType": "application/pdf"
+      }
+    ]
+  }'
+```
+
+### Send with Custom Headers
+
+```bash
+curl -X POST "https://your-instance.com/api/v1/emails" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "from": "noreply@yourdomain.com",
+    "to": "user@example.com",
+    "subject": "Password Reset",
+    "html": "<p>Click here to reset your password...</p>",
+    "headers": {
+      "X-Priority": "1",
+      "X-Custom-Id": "pwd-reset-123"
+    }
+  }'
+```
+
+## Email Management
+
+### Check Email Status
+
+```bash
+curl "https://your-instance.com/api/v1/emails/email_abc123" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+Response:
+
+```json
+{
+  "id": "email_abc123",
+  "status": "delivered",
+  "from": "hello@yourdomain.com",
+  "to": ["recipient@example.com"],
+  "subject": "Hello from useSend",
+  "created_at": "2025-01-15T10:30:00Z",
+  "delivered_at": "2025-01-15T10:30:15Z",
+  "events": [
+    {
+      "type": "queued",
+      "timestamp": "2025-01-15T10:30:00Z"
+    },
+    {
+      "type": "sent",
+      "timestamp": "2025-01-15T10:30:10Z"
+    },
+    {
+      "type": "delivered",
+      "timestamp": "2025-01-15T10:30:15Z"
+    }
+  ]
+}
+```
+
+### List Recent Emails
+
+```bash
+curl "https://your-instance.com/api/v1/emails?limit=10&offset=0" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+With filters:
+
+```bash
+curl "https://your-instance.com/api/v1/emails?status=delivered&limit=20" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+## Code Examples
+
+### Node.js / JavaScript
+
+```javascript
+const sendEmail = async (emailData) => {
+  const response = await fetch('https://your-instance.com/api/v1/emails', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${process.env.USESEND_API_KEY}`
+    },
+    body: JSON.stringify({
+      from: 'noreply@yourdomain.com',
+      to: emailData.recipient,
+      subject: emailData.subject,
+      html: emailData.htmlContent,
+      text: emailData.textContent
+    })
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(`Failed to send email: ${error.message}`);
+  }
+
+  return await response.json();
+};
+
+// Usage
+try {
+  const result = await sendEmail({
+    recipient: 'user@example.com',
+    subject: 'Welcome!',
+    htmlContent: '<h1>Welcome to our service!</h1>',
+    textContent: 'Welcome to our service!'
+  });
+  console.log('Email sent:', result.id);
+} catch (error) {
+  console.error('Error:', error.message);
+}
+```
+
+### Python
+
+```python
+import requests
+import os
+
+def send_email(to, subject, html_content, text_content):
+    url = f"{os.getenv('USESEND_BASE_URL')}/api/v1/emails"
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f"Bearer {os.getenv('USESEND_API_KEY')}"
+    }
+    data = {
+        'from': 'noreply@yourdomain.com',
+        'to': to,
+        'subject': subject,
+        'html': html_content,
+        'text': text_content
+    }
+
+    response = requests.post(url, json=data, headers=headers)
+    response.raise_for_status()
+    return response.json()
+
+# Usage
+try:
+    result = send_email(
+        to='user@example.com',
+        subject='Welcome!',
+        html_content='<h1>Welcome to our service!</h1>',
+        text_content='Welcome to our service!'
+    )
+    print(f"Email sent: {result['id']}")
+except requests.exceptions.RequestException as e:
+    print(f"Error: {e}")
+```
+
+### PHP
+
+```php
+<?php
+function sendEmail($to, $subject, $htmlContent, $textContent) {
+    $apiKey = getenv('USESEND_API_KEY');
+    $baseUrl = getenv('USESEND_BASE_URL');
+
+    $data = [
+        'from' => 'noreply@yourdomain.com',
+        'to' => $to,
+        'subject' => $subject,
+        'html' => $htmlContent,
+        'text' => $textContent
+    ];
+
+    $ch = curl_init("$baseUrl/api/v1/emails");
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        "Authorization: Bearer $apiKey"
+    ]);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($httpCode !== 200) {
+        throw new Exception("Failed to send email: $response");
+    }
+
+    return json_decode($response, true);
+}
+
+// Usage
+try {
+    $result = sendEmail(
+        'user@example.com',
+        'Welcome!',
+        '<h1>Welcome to our service!</h1>',
+        'Welcome to our service!'
+    );
+    echo "Email sent: " . $result['id'];
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage();
+}
+?>
+```
+
+### Go
+
+```go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "net/http"
+    "os"
+)
+
+type EmailRequest struct {
+    From    string `json:"from"`
+    To      string `json:"to"`
+    Subject string `json:"subject"`
+    HTML    string `json:"html"`
+    Text    string `json:"text"`
+}
+
+type EmailResponse struct {
+    ID        string `json:"id"`
+    Status    string `json:"status"`
+    CreatedAt string `json:"created_at"`
+}
+
+func sendEmail(to, subject, htmlContent, textContent string) (*EmailResponse, error) {
+    apiKey := os.Getenv("USESEND_API_KEY")
+    baseURL := os.Getenv("USESEND_BASE_URL")
+
+    emailReq := EmailRequest{
+        From:    "noreply@yourdomain.com",
+        To:      to,
+        Subject: subject,
+        HTML:    htmlContent,
+        Text:    textContent,
+    }
+
+    jsonData, err := json.Marshal(emailReq)
+    if err != nil {
+        return nil, err
+    }
+
+    req, err := http.NewRequest("POST", baseURL+"/api/v1/emails", bytes.NewBuffer(jsonData))
+    if err != nil {
+        return nil, err
+    }
+
+    req.Header.Set("Content-Type", "application/json")
+    req.Header.Set("Authorization", "Bearer "+apiKey)
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        return nil, err
+    }
+    defer resp.Body.Close()
+
+    var emailResp EmailResponse
+    if err := json.NewDecoder(resp.Body).Decode(&emailResp); err != nil {
+        return nil, err
+    }
+
+    return &emailResp, nil
+}
+
+func main() {
+    result, err := sendEmail(
+        "user@example.com",
+        "Welcome!",
+        "<h1>Welcome to our service!</h1>",
+        "Welcome to our service!",
+    )
+
+    if err != nil {
+        fmt.Printf("Error: %v\n", err)
+        return
+    }
+
+    fmt.Printf("Email sent: %s\n", result.ID)
+}
+```
+
+## Email Templates
+
+### Transactional Email Template
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{subject}}</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="background: #4F46E5; color: white; padding: 20px; border-radius: 8px 8px 0 0;">
+            <h1 style="margin: 0;">{{title}}</h1>
+        </div>
+        <div style="background: #ffffff; padding: 30px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 8px 8px;">
+            {{content}}
+
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+                <p style="color: #6b7280; font-size: 14px; margin: 0;">
+                    If you have any questions, please contact us at
+                    <a href="mailto:support@yourdomain.com">support@yourdomain.com</a>
+                </p>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 20px; color: #6b7280; font-size: 12px;">
+            <p>© 2025 Your Company. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
+```
+
+## Rate Limiting
+
+Be aware of rate limits when sending emails:
+
+- **AWS SES Sandbox:** 1 email/second, 200 emails/day
+- **AWS SES Production:** Depends on your sending limits
+
+Implement retry logic with exponential backoff:
+
+```javascript
+async function sendEmailWithRetry(emailData, maxRetries = 3) {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return await sendEmail(emailData);
+    } catch (error) {
+      if (error.status === 429 && i < maxRetries - 1) {
+        // Rate limited, wait and retry
+        const delay = Math.pow(2, i) * 1000; // Exponential backoff
+        await new Promise(resolve => setTimeout(resolve, delay));
+        continue;
+      }
+      throw error;
+    }
+  }
+}
+```
+
+## Next Steps
+
+- Learn about [AWS SES Sandbox](/aws-ses-sandbox) limitations
+- Check [Troubleshooting](/troubleshooting) for common API issues

@@ -1,0 +1,23 @@
+{
+  "*": {
+    "theme": {
+      "breadcrumb": true,
+      "footer": true,
+      "layout": "default",
+      "navbar": true,
+      "pagination": true,
+      "sidebar": true,
+      "timestamp": true,
+      "toc": true,
+      "typesetting": "article"
+    }
+  },
+  "index": "Introduction",
+  "getting-started": "Getting Started",
+  "configuration": "Configuration",
+  "running-tests": "Running Tests",
+  "api-examples": "API Examples",
+  "aws-ses-sandbox": "AWS SES Sandbox",
+  "troubleshooting": "Troubleshooting",
+  "project-structure": "Project Structure"
+}

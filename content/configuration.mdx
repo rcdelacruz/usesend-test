@@ -1,0 +1,153 @@
+# Configuration
+
+All configuration for the useSend Testing Suite is managed through environment variables in the `.env` file.
+
+## Environment Variables
+
+### Required Variables
+
+These variables are required for the testing suite to work:
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `USESEND_API_KEY` | Your API key from useSend dashboard | `us_abc123def456...` |
+| `USESEND_BASE_URL` | Your useSend instance URL | `https://usesend.example.com` |
+| `SENDER_EMAIL` | Verified sender email address | `noreply@yourdomain.com` |
+| `RECIPIENT_EMAIL` | Where to send test emails | `you@gmail.com` |
+
+### Optional Variables (SMTP Testing)
+
+These are only needed if you want to test SMTP functionality:
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `SMTP_HOST` | SMTP server hostname | `usesend.example.com` |
+| `SMTP_PORT` | SMTP port (usually 465 or 587) | `465` |
+| `SMTP_USERNAME` | SMTP username | `usesend` |
+| `SMTP_PASSWORD` | SMTP password (often the API key) | `us_abc123...` |
+
+## Configuration Details
+
+### Getting Your API Key
+
+1. Log in to your useSend dashboard
+2. Navigate to **Settings** → **API Keys**
+3. Click **Create API Key**
+4. Copy the generated key (starts with `us_`)
+5. Paste it into your `.env` file as `USESEND_API_KEY`
+
+import { Callout } from 'nextra/components'
+
+<Callout type="info">
+  Keep your API key secure! Never commit your `.env` file to version control. The `.gitignore` file already excludes it.
+</Callout>
+
+### Base URL Format
+
+Your `USESEND_BASE_URL` should:
+- Include the protocol (`https://` or `http://`)
+- NOT include a trailing slash
+- Point to your useSend instance root
+
+**Correct:**
+```
+USESEND_BASE_URL=https://usesend.example.com
+```
+
+**Incorrect:**
+```
+USESEND_BASE_URL=https://usesend.example.com/
+USESEND_BASE_URL=usesend.example.com
+USESEND_BASE_URL=https://usesend.example.com/api/v1
+```
+
+### Sender Email Requirements
+
+Your sender email must:
+- Use a domain verified in your useSend dashboard
+- Be properly formatted (e.g., `noreply@domain.com`)
+- Have valid DNS records (SPF, DKIM, DMARC recommended)
+
+To verify a domain:
+1. Go to your useSend dashboard
+2. Navigate to **Domains**
+3. Add your domain and follow verification steps
+
+### Recipient Email (AWS SES Sandbox)
+
+If your AWS SES account is in sandbox mode:
+- The recipient email **must be verified** in AWS SES Console
+- You can only send to verified addresses
+- See [AWS SES Sandbox](/aws-ses-sandbox) for details
+
+<Callout type="warning">
+  **Sandbox Mode:** If you get "Email address is not verified" errors, you need to verify the recipient email in AWS SES Console before testing.
+</Callout>
+
+## SMTP Configuration
+
+### When to Use SMTP Testing
+
+SMTP testing is optional because:
+- REST API is the primary method for sending emails
+- Not all self-hosted instances expose SMTP ports
+- SMTP might be blocked by firewalls
+
+### SMTP Ports
+
+- **Port 465**: SMTP over SSL/TLS (secure, recommended)
+- **Port 587**: SMTP with STARTTLS (also secure)
+- **Port 25**: Unencrypted (not recommended)
+
+### SMTP Password
+
+Usually, your SMTP password is the same as your API key:
+
+```env
+SMTP_PASSWORD=us_abc123...  # Same as USESEND_API_KEY
+```
+
+## Configuration Validation
+
+The test script automatically validates your configuration before running tests. It checks:
+
+1. All required variables are set
+2. API key format is valid
+3. Email addresses are properly formatted
+4. Base URL is accessible
+
+If validation fails, you'll see specific error messages indicating what needs to be fixed.
+
+## Example Configuration
+
+Here's a complete example `.env` file:
+
+```env filename=".env"
+# useSend Instance Configuration
+USESEND_API_KEY=us_1234567890abcdef
+USESEND_BASE_URL=https://usesend.mycompany.com
+
+# Email Addresses
+SENDER_EMAIL=noreply@mycompany.com
+RECIPIENT_EMAIL=admin@mycompany.com
+
+# SMTP Settings (Optional)
+SMTP_HOST=usesend.mycompany.com
+SMTP_PORT=465
+SMTP_USERNAME=usesend
+SMTP_PASSWORD=us_1234567890abcdef
+```
+
+## Security Best Practices
+
+1. **Never commit `.env`** - It's already in `.gitignore`
+2. **Rotate API keys regularly** - Generate new keys periodically
+3. **Use environment-specific keys** - Different keys for dev/staging/prod
+4. **Restrict API key permissions** - Use least privilege principle
+5. **Monitor API usage** - Check dashboard for unusual activity
+
+## Next Steps
+
+Once configured, proceed to:
+- [Running Tests](/running-tests) - Execute the test suite
+- [Troubleshooting](/troubleshooting) - Solve common configuration issues

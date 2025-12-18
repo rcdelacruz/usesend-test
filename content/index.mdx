@@ -1,0 +1,72 @@
+# useSend Testing Suite
+
+Welcome to the **useSend Testing Suite** documentation! This comprehensive testing suite helps you verify that your self-hosted useSend instance is properly configured and working.
+
+## What is useSend?
+
+useSend is a self-hosted email service platform that provides:
+- RESTful API for transactional emails
+- SMTP server support
+- Email analytics and tracking
+- Integration with AWS SES
+
+## Features
+
+This testing suite provides:
+
+- ✅ **REST API Testing** - Verify transactional email sending via REST API
+- ✅ **SMTP Server Testing** - Test SMTP configuration (optional)
+- ✅ **Configuration Validation** - Ensure all required settings are configured
+- ✅ **Detailed Logging** - Color-coded output for easy debugging
+- ✅ **Error Reporting** - Comprehensive error messages and troubleshooting
+- ✅ **Email Delivery Tracking** - Monitor email status and delivery
+
+## Quick Start
+
+Get up and running in 3 simple steps:
+
+```bash
+# 1. Install dependencies
+npm install
+
+# 2. Configure your .env file
+cp .env.example .env
+# Edit .env with your useSend credentials
+
+# 3. Run the tests
+npm test
+```
+
+## What You'll Learn
+
+This documentation will guide you through:
+
+1. **Getting Started** - Installation and initial setup
+2. **Configuration** - Setting up environment variables
+3. **Running Tests** - Executing the test suite
+4. **API Examples** - Using the useSend REST API
+5. **AWS SES Sandbox** - Understanding and working with AWS SES limitations
+6. **Troubleshooting** - Solving common issues
+
+## Prerequisites
+
+Before you begin, ensure you have:
+
+- Node.js (v14 or higher)
+- A self-hosted useSend instance
+- useSend API key
+- Verified email domain (in AWS SES)
+- Verified recipient email (if in AWS SES sandbox mode)
+
+## Resources
+
+- [useSend Documentation](https://docs.usesend.com)
+- [useSend GitHub Repository](https://github.com/usesend/useSend)
+- [AWS SES Documentation](https://docs.aws.amazon.com/ses/)
+
+## Support
+
+Need help? Check out:
+- The [Troubleshooting](/troubleshooting) section
+- [useSend GitHub Issues](https://github.com/usesend/useSend/issues)
+- AWS SES Documentation for SES-specific issues

@@ -1,0 +1,123 @@
+# Getting Started
+
+This guide will help you set up and run the useSend Testing Suite.
+
+## Prerequisites
+
+Before you begin, make sure you have:
+
+- **Node.js** (version 14 or higher)
+- A **self-hosted useSend instance** up and running
+- Access to your **useSend API key**
+- A **verified email domain** in your useSend dashboard
+- A **verified recipient email** (if using AWS SES sandbox mode)
+
+## Installation
+
+### 1. Clone or Download
+
+If you haven't already, get the testing suite:
+
+```bash
+git clone https://github.com/rcdelacruz/usesend-test.git
+cd usesend-test
+```
+
+### 2. Install Dependencies
+
+Install the required Node.js packages:
+
+```bash
+npm install
+```
+
+This will install:
+- `dotenv` - For environment variable management
+- `nodemailer` - For SMTP testing
+
+### 3. Configure Environment Variables
+
+Copy the example environment file:
+
+```bash
+cp .env.example .env
+```
+
+Then edit the `.env` file with your actual credentials:
+
+```env filename=".env"
+# useSend Configuration
+USESEND_API_KEY=your_api_key_here
+USESEND_BASE_URL=https://your-usesend-instance.com
+
+# Email Configuration
+SENDER_EMAIL=hello@your-verified-domain.com
+RECIPIENT_EMAIL=your-email@gmail.com
+
+# SMTP Configuration (optional)
+SMTP_HOST=your-usesend-instance.com
+SMTP_PORT=465
+SMTP_USERNAME=usesend
+SMTP_PASSWORD=your_api_key_here
+```
+
+import { Callout } from 'nextra/components'
+
+<Callout type="warning">
+  **Important:** Make sure both your sender domain and recipient email are verified in AWS SES if you're in sandbox mode. See the [AWS SES Sandbox](/aws-ses-sandbox) section for details.
+</Callout>
+
+### 4. Verify Your Configuration
+
+Before running tests, verify your useSend instance is accessible:
+
+```bash
+curl https://your-usesend-instance.com/api/v1/health
+```
+
+You should get a successful response indicating the service is running.
+
+## Next Steps
+
+Now that you're set up, you can:
+
+1. Learn more about [Configuration](/configuration) options
+2. [Run your first test](/running-tests)
+3. Explore [API Examples](/api-examples)
+
+## Troubleshooting Installation
+
+### npm install fails
+
+If `npm install` fails, try:
+
+```bash
+# Clear npm cache
+npm cache clean --force
+
+# Delete node_modules and package-lock.json
+rm -rf node_modules package-lock.json
+
+# Reinstall
+npm install
+```
+
+### Node version issues
+
+Check your Node.js version:
+
+```bash
+node --version
+```
+
+If it's below v14, update Node.js using [nvm](https://github.com/nvm-sh/nvm) or download from [nodejs.org](https://nodejs.org/).
+
+### Permission errors
+
+On Linux/Mac, you might need to use `sudo`:
+
+```bash
+sudo npm install
+```
+
+Or better yet, fix npm permissions following [npm's guide](https://docs.npmjs.com/resolving-eacces-permissions-errors-when-installing-packages-globally).

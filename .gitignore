@@ -21,3 +21,8 @@ Thumbs.db
 
 # Test output
 coverage/
+
+# Next.js / Nextra
+.next/
+out/
+.vercel

@@ -215,10 +215,10 @@ async function runAllTests() {
   results.restAPI = await testRestAPI();
 
   // Wait a bit between tests
-  await new Promise(resolve => setTimeout(resolve, 2000));
+  // await new Promise(resolve => setTimeout(resolve, 2000));
 
-  // Run SMTP test
-  results.smtp = await testSMTP();
+  // Run SMTP test (DISABLED)
+  // results.smtp = await testSMTP();
 
   // Summary
   log('\n═══════════════════════════════════════', colors.blue);

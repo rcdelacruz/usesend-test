@@ -1,0 +1,282 @@
+# AWS SES Sandbox Mode
+
+Understanding and working with AWS SES sandbox limitations.
+
+## What is AWS SES Sandbox?
+
+When you first create an AWS SES (Simple Email Service) account, it starts in **sandbox mode**. This is a restricted environment designed to prevent spam and abuse while you're testing.
+
+import { Callout } from 'nextra/components'
+
+<Callout type="warning">
+  In sandbox mode, you can **only send emails to verified email addresses**. This is the most common cause of test failures.
+</Callout>
+
+## Sandbox Limitations
+
+### Sending Restrictions
+
+| Limitation | Sandbox Mode | Production Mode |
+|------------|--------------|-----------------|
+| **Recipients** | Verified emails only | Any email address |
+| **Senders** | Verified domains/emails only | Verified domains/emails only |
+| **Daily Limit** | 200 emails per 24 hours | Higher (customizable) |
+| **Send Rate** | 1 email per second | Higher (customizable) |
+
+### What This Means for Testing
+
+1. Your **sender domain** must be verified in useSend dashboard ✅
+2. Your **recipient email** must be verified in AWS SES Console ⚠️
+3. You can only send 200 emails per day
+4. You can only send 1 email per second
+
+## Verifying Email Addresses
+
+### Step 1: Access AWS SES Console
+
+1. Log in to [AWS Console](https://console.aws.amazon.com/)
+2. Navigate to **SES (Simple Email Service)**
+3. **Important:** Switch to the correct region (e.g., US-WEST-2)
+   - Check which region your useSend instance uses
+   - The region selector is in the top-right corner
+
+### Step 2: Verify Recipient Email
+
+1. In SES Console, go to **"Verified identities"** (left sidebar)
+2. Click **"Create identity"**
+3. Select **"Email address"**
+4. Enter the recipient email address (e.g., `your@gmail.com`)
+5. Click **"Create identity"**
+
+### Step 3: Check Email for Verification Link
+
+1. AWS sends a verification email to the address
+2. Check your inbox (and spam folder)
+3. Click the verification link in the email
+4. Return to SES Console to confirm status shows **"Verified"**
+
+<Callout type="info">
+  The verification link expires after 24 hours. If it expires, delete the identity and create it again.
+</Callout>
+
+### Step 4: Verify Status
+
+In the AWS SES Console, your email should show:
+- **Status:** Verified ✅
+- **Identity type:** Email address
+
+## Verifying Sender Domain
+
+Your sender domain is verified through useSend, not directly in AWS SES.
+
+### In useSend Dashboard
+
+1. Navigate to **Domains** section
+2. Add your domain (e.g., `yourdomain.com`)
+3. Add DNS records provided by useSend:
+   - **TXT record** for domain verification
+   - **SPF record** to allow sending
+   - **DKIM records** for email authentication
+   - **DMARC record** (optional but recommended)
+
+### DNS Record Example
+
+```dns
+; Domain verification
+@ TXT "usesend-verification=abc123def456"
+
+; SPF - Allow useSend to send emails
+@ TXT "v=spf1 include:_spf.usesend.com ~all"
+
+; DKIM - Email authentication
+default._domainkey TXT "v=DKIM1; k=rsa; p=MIGfMA0GCS..."
+
+; DMARC - Email policy
+_dmarc TXT "v=DMARC1; p=none; rua=mailto:dmarc@yourdomain.com"
+```
+
+<Callout type="info">
+  DNS changes can take up to 48 hours to propagate, but usually complete within a few hours.
+</Callout>
+
+## Common Sandbox Errors
+
+### Error: "Email address is not verified"
+
+**Full Error:**
+```json
+{
+  "error": "MessageRejected",
+  "message": "Email address is not verified. The following identities failed the check in region US-WEST-2: recipient@example.com"
+}
+```
+
+**Solution:**
+1. Verify the recipient email in AWS SES Console
+2. Make sure you're in the correct AWS region
+3. Wait for verification email and click the link
+
+### Error: "Daily sending quota exceeded"
+
+**Full Error:**
+```json
+{
+  "error": "Daily message quota exceeded"
+}
+```
+
+**Solution:**
+- You've hit the 200 emails/day limit
+- Wait 24 hours for the quota to reset
+- Or request production access (see below)
+
+### Error: "Maximum sending rate exceeded"
+
+**Full Error:**
+```json
+{
+  "error": "Maximum sending rate exceeded"
+}
+```
+
+**Solution:**
+- You're sending faster than 1 email/second
+- Add delays between emails
+- Implement rate limiting in your code
+
+## Moving to Production
+
+To send emails to **any email address** without verification:
+
+### Step 1: Request Production Access
+
+1. Open [AWS SES Console](https://console.aws.amazon.com/ses/)
+2. Go to **"Account dashboard"** (left sidebar)
+3. Look for **"Sending statistics"** section
+4. Click **"Request production access"** button
+
+### Step 2: Fill Out the Request Form
+
+You'll need to provide:
+
+1. **Use case description**
+   - Describe what emails you'll send
+   - Example: "Transactional emails for our SaaS application (password resets, notifications, receipts)"
+
+2. **Website URL**
+   - Your company/product website
+
+3. **Compliance with AWS policies**
+   - Confirm you'll follow email best practices
+   - You'll handle bounces and complaints
+   - You'll include unsubscribe links (for marketing emails)
+
+4. **Email content examples**
+   - Provide sample email templates
+
+### Step 3: Wait for Approval
+
+- **Typical wait time:** 24-48 hours
+- AWS reviews your request manually
+- You'll receive an email notification
+- Check the SES Console for updated status
+
+### Step 4: Verify Approval
+
+Once approved:
+- **Sandbox status** will show as **"Production"**
+- **Sending limits** will be increased
+- You can send to **any email address**
+- Daily quotas will be higher (check your dashboard)
+
+<Callout type="success">
+  After production access, you still need to verify sender domains, but recipient emails no longer need verification.
+</Callout>
+
+## Best Practices
+
+### While in Sandbox
+
+1. **Test thoroughly** with verified emails
+2. **Monitor bounce rates** in SES Console
+3. **Set up bounce/complaint handling** early
+4. **Verify DNS records** are correct
+5. **Implement rate limiting** to stay under 1 email/sec
+
+### After Production Access
+
+1. **Monitor reputation metrics** closely
+2. **Handle bounces and complaints** promptly
+3. **Keep bounce rate** below 5%
+4. **Keep complaint rate** below 0.1%
+5. **Set up SNS notifications** for bounces/complaints
+
+### Email Authentication
+
+Always configure:
+- ✅ **SPF:** Proves emails are from authorized servers
+- ✅ **DKIM:** Cryptographically signs emails
+- ✅ **DMARC:** Tells recipients how to handle failures
+
+This improves deliverability and reduces spam classification.
+
+## Monitoring
+
+### Check Your Sending Statistics
+
+In AWS SES Console → Account Dashboard:
+
+- **Sent:** Total emails sent
+- **Delivery rate:** Percentage successfully delivered
+- **Bounce rate:** Should be < 5%
+- **Complaint rate:** Should be < 0.1%
+
+### Set Up CloudWatch Alarms
+
+Monitor important metrics:
+
+```bash
+# Example: Alert if bounce rate > 5%
+aws cloudwatch put-metric-alarm \
+  --alarm-name ses-high-bounce-rate \
+  --alarm-description "Alert on high bounce rate" \
+  --metric-name Reputation.BounceRate \
+  --namespace AWS/SES \
+  --statistic Average \
+  --period 300 \
+  --threshold 0.05 \
+  --comparison-operator GreaterThanThreshold
+```
+
+## Troubleshooting Verification
+
+### Verification Email Not Received
+
+1. **Check spam folder** - AWS emails sometimes go to spam
+2. **Check correct email** - Verify you entered it correctly
+3. **Try different email** - Some providers block verification emails
+4. **Wait 10-15 minutes** - Delivery can be delayed
+
+### Verification Link Expired
+
+1. **Delete the identity** in SES Console
+2. **Create it again** - You'll get a new verification email
+3. **Click link quickly** - Don't wait days to verify
+
+### Wrong AWS Region
+
+1. **Check useSend configuration** - Which region does it use?
+2. **Switch region** in AWS Console (top-right dropdown)
+3. **Verify in correct region** - Must match useSend's region
+
+## Resources
+
+- [AWS SES Sandbox Documentation](https://docs.aws.amazon.com/ses/latest/dg/request-production-access.html)
+- [Moving Out of Sandbox](https://docs.aws.amazon.com/ses/latest/dg/request-production-access.html)
+- [AWS SES Best Practices](https://docs.aws.amazon.com/ses/latest/dg/best-practices.html)
+- [Email Authentication](https://docs.aws.amazon.com/ses/latest/dg/send-email-authentication.html)
+
+## Next Steps
+
+- Review [Troubleshooting](/troubleshooting) for more solutions
+- Check out [API Examples](/api-examples) for integration code

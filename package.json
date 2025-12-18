@@ -5,13 +5,22 @@
   "main": "test-usesend.js",
   "type": "module",
   "scripts": {
-    "test": "node test-usesend.js"
+    "test": "node test-usesend.js",
+    "docs:dev": "next dev",
+    "docs:build": "next build",
+    "docs:start": "next start"
   },
   "dependencies": {
     "dotenv": "^16.3.1",
     "nodemailer": "^6.9.7"
   },
-  "keywords": ["usesend", "email", "testing", "smtp", "aws-ses"],
+  "keywords": [
+    "usesend",
+    "email",
+    "testing",
+    "smtp",
+    "aws-ses"
+  ],
   "author": "",
   "license": "MIT",
   "repository": {
@@ -21,5 +30,12 @@
   "bugs": {
     "url": "https://github.com/rcdelacruz/usesend-test/issues"
   },
-  "homepage": "https://github.com/rcdelacruz/usesend-test#readme"
+  "homepage": "https://github.com/rcdelacruz/usesend-test#readme",
+  "devDependencies": {
+    "next": "^16.0.10",
+    "nextra": "^4.6.1",
+    "nextra-theme-docs": "^4.6.1",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
+  }
 }

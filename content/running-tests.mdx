@@ -1,0 +1,256 @@
+# Running Tests
+
+Learn how to run the useSend Testing Suite and understand the test results.
+
+## Running the Test Suite
+
+To run all tests, simply execute:
+
+```bash
+npm test
+```
+
+This will run the main test script (`test-usesend.js`) which includes:
+1. Configuration validation
+2. REST API testing
+3. SMTP testing (if configured)
+
+## Test Flow
+
+### 1. Configuration Check
+
+The first test validates all environment variables:
+
+```
+═══════════════════════════════════════
+TEST 0: Configuration Check
+═══════════════════════════════════════
+
+✓ API Key: Set
+✓ Base URL: Set
+✓ Sender Email: Set
+✓ Recipient Email: Set
+✓ SMTP Host: Set
+✓ SMTP Port: Set
+✓ SMTP Username: Set
+✓ SMTP Password: Set
+```
+
+If any configuration is missing, the test suite will stop and display an error.
+
+import { Callout } from 'nextra/components'
+
+<Callout type="error">
+  If configuration validation fails, check your `.env` file and ensure all required variables are set. See [Configuration](/configuration) for details.
+</Callout>
+
+### 2. REST API Test
+
+Tests sending an email via the useSend REST API:
+
+```
+═══════════════════════════════════════
+TEST 1: REST API - Transactional Email
+═══════════════════════════════════════
+
+ℹ Sending to: recipient@example.com
+ℹ From: sender@example.com
+ℹ API Endpoint: https://usesend.example.com/api/v1/emails
+
+✓ REST API test email sent successfully!
+Response: {
+  "id": "email_abc123",
+  "status": "queued",
+  "created_at": "2025-01-15T10:30:00Z"
+}
+```
+
+The test sends an HTML and plain-text email with:
+- Timestamped subject line
+- Styled HTML content
+- API response validation
+
+### 3. SMTP Test (Optional)
+
+Tests email sending via SMTP protocol:
+
+```
+═══════════════════════════════════════
+TEST 2: SMTP - Email Sending
+═══════════════════════════════════════
+
+ℹ SMTP Host: usesend.example.com
+ℹ SMTP Port: 465
+ℹ SMTP Username: usesend
+
+ℹ Verifying SMTP connection...
+✓ SMTP connection verified!
+
+ℹ Sending SMTP email to: recipient@example.com
+✓ SMTP test email sent successfully!
+Message ID: <abc123@usesend.example.com>
+```
+
+<Callout type="info">
+  **Note:** SMTP testing is currently disabled by default in the test script. You can enable it by uncommenting the SMTP test section in `test-usesend.js:220-221`.
+</Callout>
+
+## Test Results
+
+### Success Output
+
+When all tests pass:
+
+```
+═══════════════════════════════════════
+TEST SUMMARY
+═══════════════════════════════════════
+
+✓ Configuration Check: PASSED
+✓ REST API Test: PASSED
+✓ SMTP Test: PASSED
+
+───────────────────────────────────────
+Total: 3/3 tests passed
+───────────────────────────────────────
+
+🎉 All tests passed! Your useSend instance is working correctly.
+```
+
+The test script will exit with code `0` (success).
+
+### Failure Output
+
+When tests fail:
+
+```
+═══════════════════════════════════════
+TEST SUMMARY
+═══════════════════════════════════════
+
+✓ Configuration Check: PASSED
+✗ REST API Test: FAILED
+✗ SMTP Test: FAILED
+
+───────────────────────────────────────
+Total: 1/3 tests passed
+───────────────────────────────────────
+
+⚠️  Some tests failed. Please check the errors above.
+```
+
+The test script will exit with code `1` (failure).
+
+## Understanding Test Emails
+
+When tests succeed, you'll receive test emails at the configured recipient address:
+
+### REST API Test Email
+- **Subject:** `useSend API Test - [timestamp]`
+- **Header Color:** Blue
+- **Content:** Confirms REST API is working
+
+### SMTP Test Email (if enabled)
+- **Subject:** `useSend SMTP Test - [timestamp]`
+- **Header Color:** Green
+- **Content:** Confirms SMTP server is working
+
+Both emails include timestamps for verification.
+
+## Debugging Failed Tests
+
+### Enable Detailed Logging
+
+The test script already includes detailed logging, but you can add more by modifying `test-usesend.js`:
+
+```js
+// Add after line 87 in testRestAPI function
+console.log('Request body:', JSON.stringify(emailData, null, 2));
+console.log('Request headers:', {
+  'Content-Type': 'application/json',
+  'Authorization': `Bearer ${config.apiKey.substring(0, 10)}...`
+});
+```
+
+### Check Network Connectivity
+
+Verify your useSend instance is accessible:
+
+```bash
+curl -I https://your-usesend-instance.com
+```
+
+### Test API Endpoint Manually
+
+Try sending an email manually with curl:
+
+```bash
+curl -X POST "https://your-instance.com/api/v1/emails" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "from": "sender@domain.com",
+    "to": "recipient@example.com",
+    "subject": "Manual Test",
+    "html": "<p>Test</p>"
+  }'
+```
+
+## Running Individual Tests
+
+While the script doesn't support running individual tests directly, you can modify `test-usesend.js` to comment out specific tests:
+
+```js
+// Skip REST API test
+// results.restAPI = await testRestAPI();
+results.restAPI = true; // Mark as passed without running
+
+// Skip SMTP test (already commented by default)
+// results.smtp = await testSMTP();
+```
+
+## Continuous Testing
+
+### Setting Up Automated Tests
+
+You can automate testing with cron jobs or CI/CD:
+
+```bash
+# Add to crontab for daily testing at 9 AM
+0 9 * * * cd /path/to/usesend-test && npm test
+```
+
+### Integration with CI/CD
+
+Example GitHub Actions workflow:
+
+```yaml filename=".github/workflows/test.yml"
+name: Test useSend
+
+on:
+  schedule:
+    - cron: '0 9 * * *'  # Daily at 9 AM
+  workflow_dispatch:      # Manual trigger
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm install
+      - run: npm test
+        env:
+          USESEND_API_KEY: ${{ secrets.USESEND_API_KEY }}
+          USESEND_BASE_URL: ${{ secrets.USESEND_BASE_URL }}
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+          RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
+```
+
+## Next Steps
+
+- Review [API Examples](/api-examples) for integration patterns
+- Check [Troubleshooting](/troubleshooting) if tests fail
+- Learn about [AWS SES Sandbox](/aws-ses-sandbox) limitations

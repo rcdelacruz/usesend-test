@@ -1,0 +1,528 @@
+# Troubleshooting
+
+Solutions to common problems when testing your useSend instance.
+
+## Configuration Issues
+
+### Error: "Configuration check failed"
+
+**Symptom:**
+```
+✗ API Key: Missing
+✗ Base URL: Missing
+Configuration check failed. Please check your .env file.
+```
+
+**Solutions:**
+
+1. **Check .env file exists**
+   ```bash
+   ls -la .env
+   ```
+
+2. **Copy from example if missing**
+   ```bash
+   cp .env.example .env
+   ```
+
+3. **Verify variables are set**
+   ```bash
+   cat .env
+   ```
+
+4. **No spaces around =**
+   ```env
+   # Wrong
+   USESEND_API_KEY = your_key
+
+   # Correct
+   USESEND_API_KEY=your_key
+   ```
+
+5. **No quotes needed**
+   ```env
+   # Wrong
+   USESEND_API_KEY="your_key"
+
+   # Correct
+   USESEND_API_KEY=your_key
+   ```
+
+import { Callout } from 'nextra/components'
+
+<Callout type="info">
+  The `.env` file should be in the root directory of the project, at the same level as `package.json`.
+</Callout>
+
+## REST API Issues
+
+### Error: "Email address is not verified"
+
+**Full Error:**
+```json
+{
+  "error": "MessageRejected",
+  "message": "Email address is not verified"
+}
+```
+
+**Cause:** Your AWS SES account is in sandbox mode and the recipient email isn't verified.
+
+**Solutions:**
+
+1. **Verify recipient in AWS SES Console**
+   - See [AWS SES Sandbox](/aws-ses-sandbox) guide
+   - Must verify in the correct AWS region
+
+2. **Or use already verified email**
+   - Change `RECIPIENT_EMAIL` in `.env` to a verified address
+
+3. **Or request production access**
+   - Allows sending to any email
+   - Takes 24-48 hours for approval
+
+### Error: "Invalid API token"
+
+**Full Error:**
+```json
+{
+  "error": "Unauthorized",
+  "message": "Invalid API token"
+}
+```
+
+**Solutions:**
+
+1. **Check API key format**
+   - Should start with `us_`
+   - Example: `us_abc123def456...`
+
+2. **Generate new API key**
+   - Log in to useSend dashboard
+   - Settings → API Keys
+   - Create new key
+   - Update `.env` file
+
+3. **Check for extra spaces**
+   ```bash
+   # View hidden characters
+   cat -A .env | grep USESEND_API_KEY
+   ```
+
+4. **Verify key is active**
+   - Check dashboard - key might be revoked
+
+### Error: "Domain is wrong. Use the domain verified by useSend"
+
+**Full Error:**
+```json
+{
+  "error": "BadRequest",
+  "message": "Domain [...] is wrong. Use the domain verified by useSend"
+}
+```
+
+**Cause:** Your `SENDER_EMAIL` uses a domain not verified in useSend.
+
+**Solutions:**
+
+1. **Check verified domains**
+   - Log in to useSend dashboard
+   - Go to Domains section
+   - See which domains are verified ✅
+
+2. **Update sender email**
+   ```env
+   # Use a verified domain
+   SENDER_EMAIL=noreply@verified-domain.com
+   ```
+
+3. **Or verify new domain**
+   - Add domain in useSend dashboard
+   - Add DNS records (TXT, SPF, DKIM)
+   - Wait for verification (can take hours)
+
+### Error: "404 Not Found"
+
+**Symptom:**
+```
+✗ REST API test failed!
+Status: 404
+```
+
+**Solutions:**
+
+1. **Check endpoint URL**
+   ```env
+   # Correct - no trailing slash
+   USESEND_BASE_URL=https://usesend.example.com
+
+   # Wrong
+   USESEND_BASE_URL=https://usesend.example.com/
+   USESEND_BASE_URL=https://usesend.example.com/api/v1
+   ```
+
+2. **Verify instance is running**
+   ```bash
+   curl -I https://your-usesend-instance.com
+   ```
+
+3. **Check DNS/networking**
+   ```bash
+   ping your-usesend-instance.com
+   ```
+
+### Error: "Connection timeout"
+
+**Symptom:**
+```
+✗ REST API test error: connect ETIMEDOUT
+```
+
+**Solutions:**
+
+1. **Check instance URL**
+   - Is it accessible from your network?
+   - Try opening in browser
+
+2. **Check firewall rules**
+   - Ensure port 443 (HTTPS) is open
+   - Check security groups (if on AWS)
+
+3. **Verify HTTPS/HTTP**
+   ```env
+   # Use HTTPS if available
+   USESEND_BASE_URL=https://usesend.example.com
+   ```
+
+4. **Test with curl**
+   ```bash
+   curl -v https://your-instance.com/api/v1/health
+   ```
+
+## SMTP Issues
+
+### Error: "Connection timeout" (SMTP)
+
+**Symptom:**
+```
+✗ SMTP test error: connect ETIMEDOUT
+```
+
+**Cause:** SMTP ports might not be exposed on your useSend instance.
+
+**Solutions:**
+
+1. **SMTP is optional** - You don't need it
+   - REST API is the primary method
+   - Skip SMTP testing if not needed
+
+2. **Check if SMTP is enabled**
+   - Contact your useSend administrator
+   - SMTP might not be configured
+
+3. **Check ports are open**
+   ```bash
+   telnet your-instance.com 465
+   telnet your-instance.com 587
+   ```
+
+4. **Disable SMTP test**
+   - It's already disabled by default in the script
+   - See `test-usesend.js:220-221`
+
+### Error: "Invalid login" (SMTP)
+
+**Symptom:**
+```
+✗ SMTP test error: Invalid login
+```
+
+**Solutions:**
+
+1. **Use API key as password**
+   ```env
+   SMTP_PASSWORD=us_abc123...  # Same as USESEND_API_KEY
+   ```
+
+2. **Check SMTP username**
+   ```env
+   # Common values
+   SMTP_USERNAME=usesend
+   SMTP_USERNAME=apikey
+   ```
+
+3. **Verify SMTP is configured**
+   - Check useSend documentation
+   - SMTP setup might differ
+
+## Network & Connectivity
+
+### Error: "ECONNREFUSED"
+
+**Symptom:**
+```
+✗ REST API test error: connect ECONNREFUSED
+```
+
+**Cause:** Can't connect to the useSend instance.
+
+**Solutions:**
+
+1. **Check instance is running**
+   ```bash
+   # SSH to server and check
+   docker ps  # if using Docker
+   systemctl status usesend  # if using systemd
+   ```
+
+2. **Verify port is correct**
+   - Usually 443 for HTTPS
+   - Check if using custom port
+
+3. **Check local firewall**
+   ```bash
+   # On Ubuntu/Debian
+   sudo ufw status
+   ```
+
+### Error: "ENOTFOUND"
+
+**Symptom:**
+```
+✗ REST API test error: getaddrinfo ENOTFOUND
+```
+
+**Cause:** DNS can't resolve the hostname.
+
+**Solutions:**
+
+1. **Check domain exists**
+   ```bash
+   nslookup your-usesend-instance.com
+   dig your-usesend-instance.com
+   ```
+
+2. **Try IP address temporarily**
+   ```env
+   USESEND_BASE_URL=https://192.168.1.100
+   ```
+
+3. **Check /etc/hosts** (if using local domain)
+   ```bash
+   cat /etc/hosts
+   ```
+
+## Email Delivery Issues
+
+### Emails not arriving
+
+**Symptom:** Tests pass but emails don't arrive in inbox.
+
+**Solutions:**
+
+1. **Check spam folder**
+   - Test emails often go to spam
+   - Mark as "Not Spam" to train filter
+
+2. **Wait 5-10 minutes**
+   - Email delivery can be delayed
+   - AWS SES queues emails
+
+3. **Check email status in useSend dashboard**
+   - Look for bounces or failures
+   - Check delivery logs
+
+4. **Verify SPF/DKIM/DMARC**
+   ```bash
+   # Check DNS records
+   dig TXT yourdomain.com
+   dig TXT default._domainkey.yourdomain.com
+   dig TXT _dmarc.yourdomain.com
+   ```
+
+5. **Check recipient email works**
+   - Try different recipient
+   - Some providers block certain senders
+
+### Emails marked as spam
+
+**Cause:** Missing or incorrect email authentication.
+
+**Solutions:**
+
+1. **Set up SPF**
+   ```dns
+   yourdomain.com. IN TXT "v=spf1 include:_spf.usesend.com ~all"
+   ```
+
+2. **Set up DKIM**
+   - Add DKIM records from useSend dashboard
+   - Usually 2-3 TXT records
+
+3. **Set up DMARC**
+   ```dns
+   _dmarc.yourdomain.com. IN TXT "v=DMARC1; p=none; rua=mailto:dmarc@yourdomain.com"
+   ```
+
+4. **Improve email content**
+   - Avoid spam trigger words
+   - Include unsubscribe link
+   - Use proper HTML structure
+
+## Node.js / npm Issues
+
+### Error: "Cannot find module 'dotenv'"
+
+**Symptom:**
+```
+Error: Cannot find module 'dotenv'
+```
+
+**Solution:**
+```bash
+npm install
+```
+
+### Error: "node: not found"
+
+**Symptom:**
+```bash
+npm test
+# bash: node: command not found
+```
+
+**Solution:**
+
+1. **Install Node.js**
+   ```bash
+   # Ubuntu/Debian
+   curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+   sudo apt-get install -y nodejs
+
+   # macOS
+   brew install node
+   ```
+
+2. **Or use nvm**
+   ```bash
+   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+   nvm install 18
+   nvm use 18
+   ```
+
+### Error: "Permission denied"
+
+**Symptom:**
+```
+npm ERR! Error: EACCES: permission denied
+```
+
+**Solutions:**
+
+1. **Fix npm permissions** (recommended)
+   ```bash
+   mkdir ~/.npm-global
+   npm config set prefix '~/.npm-global'
+   echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.bashrc
+   source ~/.bashrc
+   ```
+
+2. **Or use sudo** (not recommended)
+   ```bash
+   sudo npm install
+   ```
+
+## Debugging Tips
+
+### Enable Verbose Logging
+
+Add console.log statements in `test-usesend.js`:
+
+```javascript
+// After line 74
+console.log('Email data:', JSON.stringify(emailData, null, 2));
+
+// After line 76
+console.log('Request URL:', `${config.baseUrl}/api/v1/emails`);
+console.log('Request headers:', {
+  'Authorization': `Bearer ${config.apiKey.substring(0, 10)}...`,
+  'Content-Type': 'application/json'
+});
+```
+
+### Test with curl
+
+Manually test the API:
+
+```bash
+curl -v -X POST "https://your-instance.com/api/v1/emails" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "from": "sender@domain.com",
+    "to": "recipient@example.com",
+    "subject": "Test",
+    "html": "<p>Test</p>"
+  }'
+```
+
+### Check useSend Logs
+
+SSH to your useSend server:
+
+```bash
+# Docker logs
+docker logs usesend-container
+
+# Or if using PM2/systemd
+journalctl -u usesend -f
+```
+
+### Network Inspection
+
+Use network tools to debug:
+
+```bash
+# Test connectivity
+ping your-instance.com
+
+# Test DNS resolution
+nslookup your-instance.com
+
+# Test port accessibility
+telnet your-instance.com 443
+
+# Or use netcat
+nc -zv your-instance.com 443
+
+# Full request inspection
+curl -v -I https://your-instance.com
+```
+
+## Getting More Help
+
+If you're still stuck:
+
+1. **Check useSend GitHub Issues**
+   - https://github.com/usesend/useSend/issues
+   - Search for similar problems
+
+2. **Review AWS SES Documentation**
+   - https://docs.aws.amazon.com/ses/
+   - Especially for sandbox/delivery issues
+
+3. **Enable debug mode**
+   - Add verbose logging to the test script
+   - Check browser network tab (if using web interface)
+
+4. **Create a GitHub issue**
+   - Provide full error messages
+   - Include (sanitized) configuration
+   - Describe steps to reproduce
+
+## Next Steps
+
+- Review [AWS SES Sandbox](/aws-ses-sandbox) for verification issues
+- Check [Configuration](/configuration) for setup details
+- See [Running Tests](/running-tests) for test execution help
