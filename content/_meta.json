@@ -1,28 +1,11 @@
 {
-  "index": {
-    "title": "Overview",
-    "type": "page"
-  },
-  "getting-started": {
-    "title": "Getting Started",
-    "type": "page"
-  },
-  "configuration": {
-    "title": "Configuration",
-    "type": "page"
-  },
-  "running-tests": {
-    "title": "Running Tests",
-    "type": "page"
-  },
-  "api-examples": {
-    "title": "API Examples",
-    "type": "page"
-  },
-  "aws-ses-sandbox": {
-    "title": "AWS SES",
-    "type": "page"
-  },
+  "index": "Overview",
+  "getting-started": "Getting Started",
+  "guides": "Guides",
+  "configuration": "Configuration",
+  "running-tests": "Running Tests",
+  "api-examples": "API Examples",
+  "aws-ses-sandbox": "AWS SES Sandbox",
   "troubleshooting": "Troubleshooting",
   "project-structure": "Project Structure"
 }
