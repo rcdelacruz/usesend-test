@@ -1,205 +1,591 @@
 @import 'nextra-theme-docs/style.css';
 
-/* Claude Code Design System - Color Palette */
+/* ===== EXACT CLAUDE CODE DESIGN SYSTEM ===== */
+/* Extracted from https://code.claude.com/docs/en/overview */
+
+/* Override Nextra navbar height to account for navbar + tabs */
 :root {
-  /* Light mode colors */
-  --claude-bg: #FDFDF7;
-  --claude-text: rgb(60, 38, 22);
-  --claude-accent: #D4A27F;
-  --claude-secondary: #0E0E0E;
-  --claude-border: rgba(209, 213, 219, 0.3);
-  --claude-code-bg: #F9F9F7;
-
-  /* Override Nextra defaults */
-  --nextra-bg: var(--claude-bg);
-  --nextra-primary-hue: 27deg;
-  --nextra-primary-saturation: 45%;
+  --nextra-navbar-height: 104px !important;
 }
 
-.dark {
-  /* Dark mode colors */
-  --claude-bg: #09090B;
-  --claude-text: rgb(243, 243, 243);
-  --claude-accent: #D4A27F;
-  --claude-secondary: #1a1918;
-  --claude-border: rgba(255, 255, 255, 0.1);
-  --claude-code-bg: #1a1918;
-
-  --nextra-bg: var(--claude-bg);
+/* Prevent content from scrolling behind sticky navbar */
+html {
+  scroll-padding-top: 104px !important;
 }
 
-/* Typography - Anthropic-inspired fonts */
+:root:not(.dark) {
+  /* Accent colors - Exact HSL values from Claude Code */
+  --accent-brand: 15 63.1% 59.6%;
+  --accent-main-100: 15 55.6% 52.4%;
+  --accent-main-200: 15 63.1% 59.6%;
+
+  /* Background colors - RGB format */
+  --bg-000: 255 255 255;        /* white */
+  --bg-100: 253 253 247;        /* very light warm */
+  --bg-200: 250 247 237;        /* light warm */
+  --bg-300: 232 227 214;        /* warm gray */
+  --bg-500: 232 227 214;        /* warm gray */
+
+  /* Text colors - RGB format */
+  --text-000: 19 19 20;         /* very dark gray */
+  --text-100: 19 19 20;         /* very dark gray */
+  --text-200: 58 58 61;         /* medium dark gray */
+  --text-secondary: 58 58 61;   /* medium dark gray */
+
+  /* Border colors - RGB format */
+  --border-300: 30 30 29;       /* very dark brown */
+
+  /* Danger/Error - HSL format kept as is */
+  --danger-100: 0 58.6% 34.1%;
+
+  /* On-color - RGB format */
+  --oncolor-100: 255 255 255;   /* white */
+
+  /* Nextra overrides */
+  --nextra-primary-hue: 15;
+  --nextra-primary-saturation: 55.6%;
+  --nextra-primary-lightness: 52.4%;
+  --nextra-bg: 253 253 247;
+}
+
+:root.dark {
+  /* Accent colors - Same in dark mode */
+  --accent-brand: 15 63.1% 59.6%;
+  --accent-main-100: 15 63.1% 59.6%;
+  --accent-main-200: 15 63.1% 59.6%;
+
+  /* Background colors - EXACT from Claude Code */
+  --bg-000: 9 9 11;        /* #09090B - main background */
+  --bg-100: 10 10 10;      /* #0A0A0A - slightly lighter */
+  --bg-200: 23 23 23;      /* #171717 - cards/panels */
+  --bg-300: 37 37 37;      /* #252525 - hover states */
+
+  /* Text colors - using Claude Code's gray scale */
+  --text-000: 222 222 222;    /* #DEDEDE - primary text (gray-200) */
+  --text-100: 222 222 222;    /* #DEDEDE - headings */
+  --text-200: 158 158 158;    /* #9E9E9E - secondary text (gray-400) */
+  --text-secondary: 158 158 158;
+
+  /* Border colors - using Claude Code's gray scale */
+  --border-300: 37 37 37;     /* #252525 - borders (gray-800) */
+
+  /* Danger/Error */
+  --danger-100: 0 58.6% 34.1%;
+
+  /* On-color */
+  --oncolor-100: 9 9 11;
+
+  /* Nextra overrides */
+  --nextra-primary-hue: 15;
+  --nextra-primary-saturation: 63.1%;
+  --nextra-primary-lightness: 59.6%;
+  --nextra-bg: 9, 9, 11;
+}
+
+/* ===== TYPOGRAPHY - EXACT CLAUDE CODE ===== */
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  background-color: var(--claude-bg);
-  color: var(--claude-text);
+  font-family: "Anthropic Sans", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  background-color: rgb(var(--bg-000));
+  color: rgb(var(--text-000));
   line-height: 1.65;
+  font-size: 16px;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.dark body {
+  background-color: rgb(9, 9, 11) !important;
+  color: rgb(222, 222, 222) !important;
+}
+
+/* Force main backgrounds in dark mode */
+.dark html,
+.dark body,
+.dark #__next,
+.dark main {
+  background-color: rgb(9, 9, 11) !important;
+}
+
+/* Override Nextra's footer background */
+.dark footer,
+.dark footer > div {
+  background-color: rgb(9, 9, 11) !important;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: Georgia, "Times New Roman", Times, serif;
-  font-weight: 500;
-  color: var(--claude-text);
+  font-family: "Anthropic Sans", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  font-weight: 600;
+  color: rgb(var(--text-000));
+  letter-spacing: -0.025em;
 }
 
-/* Accent color for links and interactive elements */
+#content-container p {
+  font-size: 1rem;
+  line-height: 1.65rem;
+}
+
+/* ===== LINKS ===== */
+
 a {
-  color: var(--claude-accent);
+  color: hsl(var(--accent-main-100));
   text-decoration: none;
-  transition: opacity 0.2s;
+  transition: color 0.2s ease;
 }
 
 a:hover {
-  opacity: 0.8;
+  color: hsl(var(--accent-main-200));
 }
 
-/* Navbar styling */
+/* ===== NAVBAR ===== */
+
+.navbar-wrapper {
+  --bg-000: 255, 255, 255;
+}
+
+.dark .navbar-wrapper {
+  --bg-000: 9, 9, 11;
+  background-color: rgb(9, 9, 11) !important;
+}
+
 .nextra-navbar {
-  background-color: var(--claude-bg);
-  border-bottom: 1px solid var(--claude-border);
+  background-color: rgb(var(--bg-000));
+  border-bottom: none;
+  backdrop-filter: blur(12px);
+}
+
+.dark .nextra-navbar {
+  background-color: rgb(9, 9, 11) !important;
 }
 
 .nextra-navbar-blur {
-  background-color: rgba(253, 253, 247, 0.95);
+  background-color: rgb(var(--bg-000) / 0.85);
+  backdrop-filter: blur(12px);
 }
 
 .dark .nextra-navbar-blur {
-  background-color: rgba(9, 9, 11, 0.95);
+  background-color: rgb(9, 9, 11, 0.85) !important;
 }
 
-/* Sidebar styling */
-.nextra-sidebar-container {
-  background-color: var(--claude-bg);
+.nextra-navbar-container {
+  max-width: 90rem;
+  margin: 0 auto;
 }
 
-.nextra-sidebar-container ul li a {
-  color: var(--claude-text);
-  transition: all 0.2s;
-  border-radius: 6px;
+/* ===== NAVIGATION TABS ===== */
+
+.nextra-nav-tabs {
+  background-color: rgb(var(--bg-000));
+  border-bottom: 1px solid rgb(var(--border-300) / 0.1);
 }
 
-.nextra-sidebar-container ul li a:hover {
-  background-color: rgba(212, 162, 127, 0.1);
+.dark .nextra-nav-tabs {
+  background-color: rgb(9, 9, 11);
+  border-bottom: 1px solid #252525;
 }
 
-.nextra-sidebar-container ul li a.active {
-  background-color: rgba(212, 162, 127, 0.15);
-  color: var(--claude-accent);
+.nav-tab-link {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgb(var(--text-200));
+  transition: color 0.2s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nav-tab-link:hover {
+  color: rgb(var(--text-000));
+}
+
+.nav-tab-link.active {
+  color: rgb(var(--text-000));
   font-weight: 600;
 }
 
-/* Code blocks */
+.dark .nav-tab-link {
+  color: #9E9E9E;
+}
+
+.dark .nav-tab-link:hover {
+  color: #DEDEDE;
+}
+
+.dark .nav-tab-link.active {
+  color: #DEDEDE;
+}
+
+.nextra-content-wrapper {
+  display: contents;
+}
+
+.nextra-content-wrapper article {
+  padding-top: 2rem;
+}
+
+
+.nav-tabs {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 48px;
+  gap: 1.5rem; /* gap-x-6 from Claude Code = 24px = 1.5rem */
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  font-size: 14px; /* text-sm from Claude Code */
+}
+
+.nav-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.nav-tabs-item {
+  position: relative;
+  transition: color 0.15s ease;
+  white-space: nowrap;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  font-size: 14px;
+  padding: 0;
+  color: rgb(var(--text-200));
+  font-weight: 500;
+  gap: 0.5rem; /* gap-2 from Claude Code */
+}
+
+.nav-tabs-item:hover {
+  color: rgb(var(--text-000));
+}
+
+/* Active tab styling */
+.nav-tabs-item.font-semibold {
+  color: rgb(var(--text-000));
+  font-weight: 500; /* Keep 500, text-shadow makes it look bold */
+}
+
+/* Active tab underline */
+.nav-tabs-item .bg-primary {
+  background-color: rgb(var(--text-000)) !important;
+  height: 2px !important;
+}
+
+.dark .nav-tabs-item .bg-primary {
+  background-color: rgb(212, 162, 127) !important; /* accent color */
+}
+
+/* ===== SIDEBAR ===== */
+
+.nextra-sidebar-container {
+  background-color: rgb(var(--bg-100));
+  border-right: 1px solid rgb(var(--border-300) / 0.1);
+  padding: 1rem 0;
+}
+
+.dark .nextra-sidebar-container {
+  background-color: rgb(var(--bg-000));
+  border-right: 1px solid rgb(var(--border-300) / 0.1);
+}
+
+/* Target the actual scrollable wrapper inside sidebar - this has overflow-y-auto */
+.nextra-sidebar-container .nextra-scrollbar {
+  scroll-padding-top: 1.5rem !important;
+}
+
+@media (min-width: 1024px) {
+  .nextra-sidebar-container {
+    width: 23.7rem;
+  }
+}
+
+/* Sidebar links - Light mode */
+.nextra-sidebar-container ul li a,
+aside.nextra-sidebar ul li a,
+aside a {
+  color: rgb(var(--text-000)) !important;
+  transition: all 0.15s ease;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.nextra-sidebar-container ul li a:hover,
+aside.nextra-sidebar ul li a:hover,
+aside a:hover {
+  background-color: rgb(var(--bg-300)) !important;
+  color: rgb(var(--text-000)) !important;
+}
+
+/* Active sidebar links - Light mode */
+.nextra-sidebar-container ul li.active > a,
+aside.nextra-sidebar ul li.active > a,
+aside li.active > a {
+  background-color: rgb(var(--bg-300)) !important;
+  color: rgb(var(--text-000)) !important;
+  font-weight: 600 !important;
+}
+
+/* Sidebar links - Dark mode - EXACT Claude Code colors */
+.dark .nextra-sidebar-container ul li a,
+.dark aside.nextra-sidebar ul li a,
+.dark aside a {
+  color: rgb(158, 158, 158) !important; /* gray-400 from Claude Code */
+}
+
+.dark .nextra-sidebar-container ul li a:hover,
+.dark aside.nextra-sidebar ul li a:hover,
+.dark aside a:hover {
+  background-color: rgba(222, 222, 222, 0.05) !important; /* gray-200 at 5% */
+  color: rgb(222, 222, 222) !important; /* gray-200 */
+}
+
+/* Active sidebar links - Dark mode */
+.dark .nextra-sidebar-container ul li.active > a,
+.dark aside.nextra-sidebar ul li.active > a,
+.dark aside li.active > a {
+  background-color: rgba(212, 162, 127, 0.1) !important; /* primary accent at 10% */
+  color: rgb(212, 162, 127) !important; /* primary accent color */
+  font-weight: 600 !important;
+}
+
+/* ===== CODE BLOCKS ===== */
+
 pre {
-  background-color: var(--claude-code-bg) !important;
-  border: 1px solid var(--claude-border);
-  border-radius: 8px;
-  padding: 1.25rem !important;
+  background-color: rgb(var(--bg-100)) !important;
+  border: 1px solid rgb(var(--border-300) / 0.1);
+  border-radius: 6px;
+  padding: 1rem !important;
+  font-size: 14px;
+  line-height: 1.6;
+  position: relative;
+}
+
+.dark pre {
+  background-color: rgb(var(--bg-100)) !important;
+  border: 1px solid rgb(var(--border-300) / 0.3);
 }
 
 code {
-  font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
+  font-family: ui-monospace, "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
   font-size: 0.9em;
 }
 
 /* Inline code */
 :not(pre) > code {
-  background-color: rgba(212, 162, 127, 0.1);
-  color: var(--claude-accent);
+  background-color: rgb(var(--bg-100));
+  color: rgb(var(--text-000));
   padding: 0.2em 0.4em;
-  border-radius: 4px;
+  border-radius: 3px;
   font-size: 0.875em;
+  border: 1px solid rgb(var(--border-300) / 0.1);
 }
 
-/* Buttons and interactive elements */
+.dark :not(pre) > code {
+  background-color: rgb(var(--bg-100));
+  border: 1px solid rgb(var(--border-300) / 0.3);
+}
+
+/* Copy button styling */
+pre button {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+pre:hover button {
+  opacity: 1;
+}
+
+/* ===== BUTTONS ===== */
+
 button, .nextra-button {
   border-radius: 6px;
   transition: all 0.2s;
+  font-weight: 600;
 }
 
 button:hover, .nextra-button:hover {
   opacity: 0.9;
 }
 
-/* Search */
+/* Primary button style */
+.btn-primary {
+  position: relative;
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  min-width: 5rem;
+  height: 2.25rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  color: hsl(var(--oncolor-100));
+  background-color: hsl(var(--accent-main-100));
+  border: 0.5px solid rgb(var(--border-300) / 0.25);
+  box-shadow: inset 0 0.5px 0px rgba(255, 255, 0, 0.15), 0 1px 1px rgba(0, 0, 0, 0.05);
+  text-shadow: 0 1px 2px rgb(0 0 0 / 10%);
+}
+
+/* ===== SEARCH ===== */
+
 .nextra-search input {
-  background-color: var(--claude-code-bg);
-  border: 1px solid var(--claude-border);
-  color: var(--claude-text);
-  border-radius: 6px;
+  background-color: rgb(var(--bg-100));
+  border: 1px solid rgb(var(--border-300) / 0.1);
+  color: rgb(var(--text-000));
+  border-radius: 0.75rem;
+  font-size: 14px;
+  height: 2.5rem;
+  padding-left: 2.5rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.dark .nextra-search input {
+  background-color: rgb(var(--bg-000));
+  border: 1px solid rgb(var(--border-300) / 0.3);
+  color: rgb(var(--text-000));
 }
 
 .nextra-search input:focus {
-  border-color: var(--claude-accent);
+  border-color: hsl(var(--accent-main-100));
   outline: none;
-  box-shadow: 0 0 0 3px rgba(212, 162, 127, 0.1);
+  box-shadow: 0 0 0 3px hsl(var(--accent-main-100) / 0.15);
 }
 
-/* Footer */
+/* ===== FOOTER ===== */
+
 footer {
-  border-top: 1px solid var(--claude-border);
-  background-color: var(--claude-bg);
+  border-top: 1px solid rgb(var(--border-300) / 0.1);
+  background-color: rgb(var(--bg-000));
 }
 
-/* Table of contents */
+.dark footer {
+  border-top: 1px solid rgb(var(--border-300) / 0.3);
+}
+
+/* ===== TABLE OF CONTENTS ===== */
+
 .nextra-toc {
-  border-left: 1px solid var(--claude-border);
+  border-left: 1px solid rgb(var(--border-300) / 0.1);
+  padding-top: 1.5rem !important;
+}
+
+.dark .nextra-toc {
+  border-left: 1px solid rgb(var(--border-300) / 0.3);
 }
 
 .nextra-toc a {
-  color: var(--claude-text);
-  opacity: 0.7;
-  font-size: 0.875rem;
+  color: rgb(var(--text-200));
+  font-size: 13px;
+  transition: color 0.15s ease;
+}
+
+.dark .nextra-toc a {
+  color: rgb(112, 112, 112) !important; /* gray-500 - EVEN DIMMER like Claude Code */
+}
+
+.dark .nextra-toc li {
+  color: rgb(112, 112, 112) !important;
 }
 
 .nextra-toc a:hover,
 .nextra-toc a.active {
-  opacity: 1;
-  color: var(--claude-accent);
+  color: hsl(var(--accent-main-100));
 }
 
-/* Callouts/Admonitions */
+.dark .nextra-toc a:hover,
+.dark .nextra-toc a.active {
+  color: rgb(212, 162, 127) !important; /* accent color */
+}
+
+/* ===== CALLOUTS ===== */
+
 .nextra-callout {
-  border-radius: 8px;
-  border-left: 3px solid var(--claude-accent);
+  border-radius: 6px;
+  border-left: 3px solid hsl(var(--accent-main-100));
+  background-color: hsl(var(--accent-main-100) / 0.05);
 }
 
-/* Cards */
+.dark .nextra-callout {
+  background-color: hsl(var(--accent-main-100) / 0.08);
+}
+
+/* ===== CARDS ===== */
+
 .nextra-card {
-  border: 1px solid var(--claude-border);
+  border: 1px solid rgb(var(--border-300) / 0.1);
   border-radius: 8px;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
+  background-color: rgb(var(--bg-000));
+  padding: 1rem;
+}
+
+.dark .nextra-card {
+  background-color: rgb(var(--bg-000));
+  border: 1px solid rgb(var(--border-300) / 0.3);
 }
 
 .nextra-card:hover {
-  border-color: var(--claude-accent);
-  box-shadow: 0 4px 12px rgba(212, 162, 127, 0.15);
+  border-color: hsl(var(--accent-main-100));
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-/* Headings with better spacing */
-article h1 {
-  font-size: 2.5rem;
+.dark .nextra-card:hover {
+  border-color: hsl(var(--accent-main-100));
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.nextra-card h3 {
   margin-top: 0;
-  margin-bottom: 1.5rem;
-  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgb(var(--text-000));
+}
+
+.nextra-card p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: rgb(var(--text-200));
+  line-height: 1.5;
+}
+
+/* ===== HEADINGS ===== */
+
+article h1 {
+  font-size: 2.25rem;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  letter-spacing: -0.03em;
+  font-weight: 700;
 }
 
 article h2 {
-  font-size: 1.875rem;
-  margin-top: 3rem;
+  font-size: 1.75rem;
+  margin-top: 2.5rem;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--claude-border);
+  border-bottom: 1px solid rgb(var(--border-300) / 0.1);
+  font-weight: 600;
+}
+
+.dark article h2 {
+  border-bottom: 1px solid rgb(var(--border-300) / 0.3);
 }
 
 article h3 {
-  font-size: 1.5rem;
+  font-size: 1.375rem;
   margin-top: 2rem;
   margin-bottom: 0.75rem;
+  font-weight: 600;
 }
 
-/* Better spacing for content */
+/* ===== CONTENT SPACING ===== */
+
 article p {
   margin-bottom: 1.25rem;
+  line-height: 1.65rem;
 }
 
 article ul, article ol {
@@ -211,28 +597,44 @@ article li {
   margin-bottom: 0.5rem;
 }
 
-/* Logo styling */
-.nextra-navbar a[aria-label="Home page"] {
+/* ===== TABLES ===== */
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.5rem 0;
+}
+
+table th {
+  background-color: rgb(var(--bg-100));
+  border: 1px solid rgb(var(--border-300) / 0.1);
+  padding: 0.75rem 1rem;
+  text-align: left;
   font-weight: 600;
-  color: var(--claude-text);
-  font-size: 1.125rem;
+  font-size: 14px;
 }
 
-/* Smooth transitions */
-* {
-  transition: background-color 0.2s, border-color 0.2s;
+.dark table th {
+  border: 1px solid rgb(var(--border-300) / 0.3);
+  background-color: rgb(var(--bg-100));
 }
 
-/* ===== CLAUDE CODE LAYOUT EMULATION ===== */
-
-/* Adjust sidebar width to match Claude Code (23.7rem) */
-@media (min-width: 1024px) {
-  .nextra-sidebar-container {
-    width: 23.7rem;
-  }
+table td {
+  border: 1px solid rgb(var(--border-300) / 0.1);
+  padding: 0.75rem 1rem;
+  font-size: 14px;
 }
 
-/* Main content container with proper width constraints */
+.dark table td {
+  border: 1px solid rgb(var(--border-300) / 0.3);
+}
+
+table tr:hover {
+  background-color: rgb(var(--bg-100));
+}
+
+/* ===== LAYOUT ===== */
+
 .nextra-content-container {
   max-width: 90rem;
   margin: 0 auto;
@@ -240,249 +642,141 @@ article li {
   padding-right: max(env(safe-area-inset-right), 1.5rem);
 }
 
-/* Content area - grows to fill space, reduced on XL screens */
 @media (min-width: 1280px) {
   .nextra-content {
     max-width: calc(100% - 28rem);
   }
 }
 
-/* Article content max width */
 article.nextra-body {
   max-width: 48rem;
   margin: 0 auto;
 }
 
-/* TOC (Table of Contents) sidebar styling */
 .nextra-toc-container {
   width: 16rem;
 }
 
-/* Card Groups - Claude Code style */
-.nextra-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1rem;
-  margin: 2rem 0;
-}
+/* ===== PAGINATION ===== */
 
-.nextra-card {
-  padding: 1.25rem;
-  border: 1px solid var(--claude-border);
-  border-radius: 8px;
-  background: var(--claude-bg);
-  transition: all 0.2s ease;
-  cursor: pointer;
-  position: relative;
-}
-
-.nextra-card:hover {
-  border-color: var(--claude-accent);
-  box-shadow: 0 4px 12px rgba(212, 162, 127, 0.15);
-  transform: translateY(-2px);
-}
-
-.nextra-card h3 {
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-  font-size: 1.125rem;
-  color: var(--claude-text);
-}
-
-.nextra-card p {
-  margin: 0;
-  font-size: 0.875rem;
-  color: var(--claude-text);
-  opacity: 0.8;
-}
-
-/* Tabs component - for installation methods */
-.nextra-tabs {
-  margin: 1.5rem 0;
-}
-
-.nextra-tabs-list {
-  display: flex;
-  gap: 0.5rem;
-  border-bottom: 1px solid var(--claude-border);
-  margin-bottom: 1rem;
-}
-
-.nextra-tab {
-  padding: 0.5rem 1rem;
-  border: none;
-  background: transparent;
-  color: var(--claude-text);
-  opacity: 0.6;
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: all 0.2s;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.nextra-tab:hover {
-  opacity: 0.8;
-}
-
-.nextra-tab[data-active="true"] {
-  opacity: 1;
-  border-bottom-color: var(--claude-accent);
-  color: var(--claude-accent);
-}
-
-/* Steps component styling */
-.nextra-steps {
-  counter-reset: step;
-  margin: 2rem 0;
-}
-
-.nextra-steps > div {
-  counter-increment: step;
-  position: relative;
-  padding-left: 3rem;
-  margin-bottom: 2rem;
-}
-
-.nextra-steps > div::before {
-  content: counter(step);
-  position: absolute;
-  left: 0;
-  top: 0.2rem;
-  width: 2rem;
-  height: 2rem;
-  background: var(--claude-accent);
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  font-size: 0.875rem;
-}
-
-/* Section headers with icon */
-.section-header {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin: 3rem 0 1.5rem 0;
-}
-
-.section-header svg {
-  width: 1.5rem;
-  height: 1.5rem;
-  color: var(--claude-accent);
-}
-
-/* Copy button styling */
-.nextra-code-block {
-  position: relative;
-}
-
-.nextra-copy-button {
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  padding: 0.375rem 0.75rem;
-  background: rgba(212, 162, 127, 0.1);
-  border: 1px solid var(--claude-border);
-  border-radius: 4px;
-  color: var(--claude-accent);
-  font-size: 0.75rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.nextra-copy-button:hover {
-  background: rgba(212, 162, 127, 0.2);
-}
-
-/* Feature list styling */
-.feature-list {
-  display: grid;
-  gap: 1.5rem;
-  margin: 2rem 0;
-}
-
-.feature-item {
-  display: flex;
-  gap: 1rem;
-  align-items: flex-start;
-}
-
-.feature-item-icon {
-  flex-shrink: 0;
-  width: 2.5rem;
-  height: 2.5rem;
-  background: rgba(212, 162, 127, 0.1);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--claude-accent);
-}
-
-.feature-item-content h4 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1rem;
-  font-weight: 600;
-}
-
-.feature-item-content p {
-  margin: 0;
-  font-size: 0.875rem;
-  opacity: 0.8;
-}
-
-/* Better spacing for main content */
-.nextra-content main {
-  padding-top: 2rem;
-  padding-bottom: 4rem;
-}
-
-/* Breadcrumb styling */
-.nextra-breadcrumb {
-  margin-bottom: 2rem;
-  font-size: 0.875rem;
-  color: var(--claude-text);
-  opacity: 0.6;
-}
-
-/* Page navigation (prev/next) */
 .nextra-pagination {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
-  margin-top: 4rem;
+  margin-top: 3rem;
   padding-top: 2rem;
-  border-top: 1px solid var(--claude-border);
+  border-top: 1px solid rgb(var(--border-300) / 0.1);
+}
+
+.dark .nextra-pagination {
+  border-top: 1px solid rgb(var(--border-300) / 0.3);
 }
 
 .nextra-pagination a {
-  padding: 1.25rem;
-  border: 1px solid var(--claude-border);
-  border-radius: 8px;
+  padding: 1rem;
+  border: 1px solid rgb(var(--border-300) / 0.1);
+  border-radius: 6px;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  transition: all 0.2s;
+  transition: all 0.15s ease;
+  background-color: rgb(var(--bg-000));
+}
+
+.dark .nextra-pagination a {
+  background-color: rgb(var(--bg-000));
+  border: 1px solid rgb(var(--border-300) / 0.3);
 }
 
 .nextra-pagination a:hover {
-  border-color: var(--claude-accent);
-  background: rgba(212, 162, 127, 0.05);
+  border-color: hsl(var(--accent-main-100));
+  background-color: hsl(var(--accent-main-100) / 0.05);
 }
 
-/* Search modal improvements */
-.nextra-search-modal {
-  background: var(--claude-bg);
-  border: 1px solid var(--claude-border);
-  border-radius: 12px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+.dark .nextra-pagination a:hover {
+  background-color: rgb(var(--bg-300) / 0.3);
 }
 
-/* Mobile optimizations */
+/* ===== BLOCKQUOTES ===== */
+
+blockquote {
+  border-left: 3px solid hsl(var(--accent-main-100));
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  color: rgb(var(--text-200));
+  font-style: italic;
+}
+
+/* ===== HORIZONTAL RULE ===== */
+
+hr {
+  border: none;
+  border-top: 1px solid rgb(var(--border-300) / 0.1);
+  margin: 2rem 0;
+}
+
+.dark hr {
+  border-top: 1px solid rgb(var(--border-300) / 0.3);
+}
+
+/* ===== SELECTION ===== */
+
+::selection {
+  background-color: hsl(var(--accent-main-100) / 0.3);
+  color: rgb(var(--text-000));
+}
+
+/* ===== SCROLLBAR ===== */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(var(--bg-000));
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--border-300) / 0.2);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--text-200));
+}
+
+/* ===== FOCUS STATES ===== */
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 2px solid hsl(var(--accent-main-100));
+  outline-offset: 2px;
+}
+
+/* ===== THEME TOGGLE ===== */
+
+.nextra-theme-toggle {
+  border: 1px solid rgb(var(--border-300) / 0.1);
+  border-radius: 6px;
+  padding: 0.375rem;
+  background-color: rgb(var(--bg-000));
+  transition: all 0.15s ease;
+}
+
+.dark .nextra-theme-toggle {
+  background-color: rgb(var(--bg-000));
+  border: 1px solid rgb(var(--border-300) / 0.3);
+}
+
+.nextra-theme-toggle:hover {
+  background-color: rgb(var(--bg-100));
+  border-color: hsl(var(--accent-main-100));
+}
+
+/* ===== MOBILE OPTIMIZATIONS ===== */
+
 @media (max-width: 768px) {
   .nextra-cards {
     grid-template-columns: 1fr;
@@ -491,4 +785,33 @@ article.nextra-body {
   article.nextra-body {
     max-width: 100%;
   }
+
+  article h1 {
+    font-size: 2rem;
+  }
+
+  article h2 {
+    font-size: 1.5rem;
+  }
+
+  article h3 {
+    font-size: 1.25rem;
+  }
+
+  .nav-tabs {
+    gap: 1.5rem;
+  }
+
+  .nav-tabs-container > div {
+    padding: 0 1rem;
+  }
+}
+
+/* ===== CARD GRIDS ===== */
+
+.nextra-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 0.75rem;
+  margin: 1.5rem 0;
 }

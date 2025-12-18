@@ -4,4 +4,13 @@ const withNextra = nextra({
   defaultShowCopyCode: true
 })
 
-export default withNextra()
+const nextConfig = {
+  output: 'export',
+  images: {
+    unoptimized: true
+  },
+  basePath: '/usesend-test',
+  assetPrefix: '/usesend-test/'
+}
+
+export default withNextra(nextConfig)
