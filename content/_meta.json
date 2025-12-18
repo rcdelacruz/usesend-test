@@ -1,18 +1,5 @@
 {
-  "*": {
-    "theme": {
-      "breadcrumb": true,
-      "footer": true,
-      "layout": "default",
-      "navbar": true,
-      "pagination": true,
-      "sidebar": true,
-      "timestamp": true,
-      "toc": true,
-      "typesetting": "article"
-    }
-  },
-  "index": "Introduction",
+  "index": "Overview",
   "getting-started": "Getting Started",
   "configuration": "Configuration",
   "running-tests": "Running Tests",

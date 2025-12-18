@@ -1,7 +1,7 @@
 import { Footer, Layout, Navbar } from 'nextra-theme-docs'
 import { Head } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
-import 'nextra-theme-docs/style.css'
+import './globals.css'
 
 export const metadata = {
   title: {
@@ -12,10 +12,23 @@ export const metadata = {
 }
 
 const navbar = (
-  <Navbar logo={<b>useSend Testing Suite</b>} />
+  <Navbar
+    logo={
+      <span style={{ fontWeight: 600, fontSize: '1.125rem' }}>
+        useSend Testing Suite
+      </span>
+    }
+    projectLink="https://github.com/rcdelacruz/usesend-test"
+  />
 )
 
-const footer = <Footer>MIT {new Date().getFullYear()} © useSend Testing Suite</Footer>
+const footer = (
+  <Footer>
+    <div style={{ display: 'flex', gap: '1rem', fontSize: '0.875rem' }}>
+      <span>MIT {new Date().getFullYear()} © useSend Testing Suite</span>
+    </div>
+  </Footer>
+)
 
 export default async function RootLayout({ children }) {
   return (

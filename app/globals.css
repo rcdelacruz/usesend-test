@@ -1,0 +1,494 @@
+@import 'nextra-theme-docs/style.css';
+
+/* Claude Code Design System - Color Palette */
+:root {
+  /* Light mode colors */
+  --claude-bg: #FDFDF7;
+  --claude-text: rgb(60, 38, 22);
+  --claude-accent: #D4A27F;
+  --claude-secondary: #0E0E0E;
+  --claude-border: rgba(209, 213, 219, 0.3);
+  --claude-code-bg: #F9F9F7;
+
+  /* Override Nextra defaults */
+  --nextra-bg: var(--claude-bg);
+  --nextra-primary-hue: 27deg;
+  --nextra-primary-saturation: 45%;
+}
+
+.dark {
+  /* Dark mode colors */
+  --claude-bg: #09090B;
+  --claude-text: rgb(243, 243, 243);
+  --claude-accent: #D4A27F;
+  --claude-secondary: #1a1918;
+  --claude-border: rgba(255, 255, 255, 0.1);
+  --claude-code-bg: #1a1918;
+
+  --nextra-bg: var(--claude-bg);
+}
+
+/* Typography - Anthropic-inspired fonts */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: var(--claude-bg);
+  color: var(--claude-text);
+  line-height: 1.65;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-weight: 500;
+  color: var(--claude-text);
+}
+
+/* Accent color for links and interactive elements */
+a {
+  color: var(--claude-accent);
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+a:hover {
+  opacity: 0.8;
+}
+
+/* Navbar styling */
+.nextra-navbar {
+  background-color: var(--claude-bg);
+  border-bottom: 1px solid var(--claude-border);
+}
+
+.nextra-navbar-blur {
+  background-color: rgba(253, 253, 247, 0.95);
+}
+
+.dark .nextra-navbar-blur {
+  background-color: rgba(9, 9, 11, 0.95);
+}
+
+/* Sidebar styling */
+.nextra-sidebar-container {
+  background-color: var(--claude-bg);
+}
+
+.nextra-sidebar-container ul li a {
+  color: var(--claude-text);
+  transition: all 0.2s;
+  border-radius: 6px;
+}
+
+.nextra-sidebar-container ul li a:hover {
+  background-color: rgba(212, 162, 127, 0.1);
+}
+
+.nextra-sidebar-container ul li a.active {
+  background-color: rgba(212, 162, 127, 0.15);
+  color: var(--claude-accent);
+  font-weight: 600;
+}
+
+/* Code blocks */
+pre {
+  background-color: var(--claude-code-bg) !important;
+  border: 1px solid var(--claude-border);
+  border-radius: 8px;
+  padding: 1.25rem !important;
+}
+
+code {
+  font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
+  font-size: 0.9em;
+}
+
+/* Inline code */
+:not(pre) > code {
+  background-color: rgba(212, 162, 127, 0.1);
+  color: var(--claude-accent);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-size: 0.875em;
+}
+
+/* Buttons and interactive elements */
+button, .nextra-button {
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+button:hover, .nextra-button:hover {
+  opacity: 0.9;
+}
+
+/* Search */
+.nextra-search input {
+  background-color: var(--claude-code-bg);
+  border: 1px solid var(--claude-border);
+  color: var(--claude-text);
+  border-radius: 6px;
+}
+
+.nextra-search input:focus {
+  border-color: var(--claude-accent);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(212, 162, 127, 0.1);
+}
+
+/* Footer */
+footer {
+  border-top: 1px solid var(--claude-border);
+  background-color: var(--claude-bg);
+}
+
+/* Table of contents */
+.nextra-toc {
+  border-left: 1px solid var(--claude-border);
+}
+
+.nextra-toc a {
+  color: var(--claude-text);
+  opacity: 0.7;
+  font-size: 0.875rem;
+}
+
+.nextra-toc a:hover,
+.nextra-toc a.active {
+  opacity: 1;
+  color: var(--claude-accent);
+}
+
+/* Callouts/Admonitions */
+.nextra-callout {
+  border-radius: 8px;
+  border-left: 3px solid var(--claude-accent);
+}
+
+/* Cards */
+.nextra-card {
+  border: 1px solid var(--claude-border);
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.nextra-card:hover {
+  border-color: var(--claude-accent);
+  box-shadow: 0 4px 12px rgba(212, 162, 127, 0.15);
+}
+
+/* Headings with better spacing */
+article h1 {
+  font-size: 2.5rem;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+article h2 {
+  font-size: 1.875rem;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--claude-border);
+}
+
+article h3 {
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Better spacing for content */
+article p {
+  margin-bottom: 1.25rem;
+}
+
+article ul, article ol {
+  margin-bottom: 1.25rem;
+  padding-left: 1.5rem;
+}
+
+article li {
+  margin-bottom: 0.5rem;
+}
+
+/* Logo styling */
+.nextra-navbar a[aria-label="Home page"] {
+  font-weight: 600;
+  color: var(--claude-text);
+  font-size: 1.125rem;
+}
+
+/* Smooth transitions */
+* {
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+/* ===== CLAUDE CODE LAYOUT EMULATION ===== */
+
+/* Adjust sidebar width to match Claude Code (23.7rem) */
+@media (min-width: 1024px) {
+  .nextra-sidebar-container {
+    width: 23.7rem;
+  }
+}
+
+/* Main content container with proper width constraints */
+.nextra-content-container {
+  max-width: 90rem;
+  margin: 0 auto;
+  padding-left: max(env(safe-area-inset-left), 1.5rem);
+  padding-right: max(env(safe-area-inset-right), 1.5rem);
+}
+
+/* Content area - grows to fill space, reduced on XL screens */
+@media (min-width: 1280px) {
+  .nextra-content {
+    max-width: calc(100% - 28rem);
+  }
+}
+
+/* Article content max width */
+article.nextra-body {
+  max-width: 48rem;
+  margin: 0 auto;
+}
+
+/* TOC (Table of Contents) sidebar styling */
+.nextra-toc-container {
+  width: 16rem;
+}
+
+/* Card Groups - Claude Code style */
+.nextra-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.nextra-card {
+  padding: 1.25rem;
+  border: 1px solid var(--claude-border);
+  border-radius: 8px;
+  background: var(--claude-bg);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.nextra-card:hover {
+  border-color: var(--claude-accent);
+  box-shadow: 0 4px 12px rgba(212, 162, 127, 0.15);
+  transform: translateY(-2px);
+}
+
+.nextra-card h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.125rem;
+  color: var(--claude-text);
+}
+
+.nextra-card p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--claude-text);
+  opacity: 0.8;
+}
+
+/* Tabs component - for installation methods */
+.nextra-tabs {
+  margin: 1.5rem 0;
+}
+
+.nextra-tabs-list {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--claude-border);
+  margin-bottom: 1rem;
+}
+
+.nextra-tab {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: transparent;
+  color: var(--claude-text);
+  opacity: 0.6;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.nextra-tab:hover {
+  opacity: 0.8;
+}
+
+.nextra-tab[data-active="true"] {
+  opacity: 1;
+  border-bottom-color: var(--claude-accent);
+  color: var(--claude-accent);
+}
+
+/* Steps component styling */
+.nextra-steps {
+  counter-reset: step;
+  margin: 2rem 0;
+}
+
+.nextra-steps > div {
+  counter-increment: step;
+  position: relative;
+  padding-left: 3rem;
+  margin-bottom: 2rem;
+}
+
+.nextra-steps > div::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0.2rem;
+  width: 2rem;
+  height: 2rem;
+  background: var(--claude-accent);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+/* Section headers with icon */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 3rem 0 1.5rem 0;
+}
+
+.section-header svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--claude-accent);
+}
+
+/* Copy button styling */
+.nextra-code-block {
+  position: relative;
+}
+
+.nextra-copy-button {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  padding: 0.375rem 0.75rem;
+  background: rgba(212, 162, 127, 0.1);
+  border: 1px solid var(--claude-border);
+  border-radius: 4px;
+  color: var(--claude-accent);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nextra-copy-button:hover {
+  background: rgba(212, 162, 127, 0.2);
+}
+
+/* Feature list styling */
+.feature-list {
+  display: grid;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.feature-item {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.feature-item-icon {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: rgba(212, 162, 127, 0.1);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--claude-accent);
+}
+
+.feature-item-content h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.feature-item-content p {
+  margin: 0;
+  font-size: 0.875rem;
+  opacity: 0.8;
+}
+
+/* Better spacing for main content */
+.nextra-content main {
+  padding-top: 2rem;
+  padding-bottom: 4rem;
+}
+
+/* Breadcrumb styling */
+.nextra-breadcrumb {
+  margin-bottom: 2rem;
+  font-size: 0.875rem;
+  color: var(--claude-text);
+  opacity: 0.6;
+}
+
+/* Page navigation (prev/next) */
+.nextra-pagination {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--claude-border);
+}
+
+.nextra-pagination a {
+  padding: 1.25rem;
+  border: 1px solid var(--claude-border);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.nextra-pagination a:hover {
+  border-color: var(--claude-accent);
+  background: rgba(212, 162, 127, 0.05);
+}
+
+/* Search modal improvements */
+.nextra-search-modal {
+  background: var(--claude-bg);
+  border: 1px solid var(--claude-border);
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .nextra-cards {
+    grid-template-columns: 1fr;
+  }
+
+  article.nextra-body {
+    max-width: 100%;
+  }
+}
