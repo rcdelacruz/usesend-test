@@ -1,7 +1,6 @@
 import { Footer, Layout, Navbar } from 'nextra-theme-docs'
 import { Head } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
-import { NavTabs } from '../components/NavTabs'
 import './globals.css'
 
 // Load Anthropic Sans font (exact same as Claude Code)
@@ -32,21 +31,6 @@ const navbar = (
     projectLink="https://github.com/rcdelacruz/usesend-test"
   />
 )
-
-// Commented out - navbar causing scroll blocking issues
-// const navbar = (
-//   <div style={{ position: 'sticky', top: 0, zIndex: 100, backgroundColor: 'var(--bg-000)' }} className="navbar-wrapper">
-//     <Navbar
-//       logo={
-//         <span style={{ fontWeight: 600, fontSize: '1rem', letterSpacing: '-0.01em' }}>
-//           useSend Testing Suite
-//         </span>
-//       }
-//       projectLink="https://github.com/rcdelacruz/usesend-test"
-//     />
-//     <NavTabs />
-//   </div>
-// )
 
 const footer = (
   <Footer>
