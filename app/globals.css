@@ -3,15 +3,6 @@
 /* ===== EXACT CLAUDE CODE DESIGN SYSTEM ===== */
 /* Extracted from https://code.claude.com/docs/en/overview */
 
-/* Override Nextra navbar height to account for navbar + tabs */
-:root {
-  --nextra-navbar-height: 104px !important;
-}
-
-/* Prevent content from scrolling behind sticky navbar */
-html {
-  scroll-padding-top: 104px !important;
-}
 
 :root:not(.dark) {
   /* Accent colors - Exact HSL values from Claude Code */
@@ -468,7 +459,6 @@ footer {
 
 .nextra-toc {
   border-left: 1px solid rgb(var(--border-300) / 0.1);
-  padding-top: 1.5rem !important;
 }
 
 .dark .nextra-toc {
@@ -497,18 +487,6 @@ footer {
 .dark .nextra-toc a:hover,
 .dark .nextra-toc a.active {
   color: rgb(212, 162, 127) !important; /* accent color */
-}
-
-/* ===== CALLOUTS ===== */
-
-.nextra-callout {
-  border-radius: 6px;
-  border-left: 3px solid hsl(var(--accent-main-100));
-  background-color: hsl(var(--accent-main-100) / 0.05);
-}
-
-.dark .nextra-callout {
-  background-color: hsl(var(--accent-main-100) / 0.08);
 }
 
 /* ===== CARDS ===== */
