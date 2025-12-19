@@ -465,28 +465,47 @@ footer {
   border-left: 1px solid rgb(var(--border-300) / 0.3);
 }
 
-.nextra-toc a {
-  color: rgb(var(--text-200));
-  font-size: 13px;
-  transition: color 0.15s ease;
+/* Default TOC link styles - Light mode */
+.nextra-toc a,
+.nextra-toc li a {
+  color: rgb(var(--text-200)) !important;
+  background-color: transparent !important;
+  font-size: 13px !important;
+  transition: color 0.15s ease !important;
+  font-weight: 400 !important;
 }
 
-.dark .nextra-toc a {
+/* Default TOC link styles - Dark mode */
+.dark .nextra-toc a,
+.dark .nextra-toc li a {
   color: rgb(112, 112, 112) !important; /* gray-500 - EVEN DIMMER like Claude Code */
+  background-color: transparent !important;
 }
 
 .dark .nextra-toc li {
   color: rgb(112, 112, 112) !important;
 }
 
+/* Active TOC link - Light mode */
 .nextra-toc a:hover,
-.nextra-toc a.active {
-  color: hsl(var(--accent-main-100));
+.nextra-toc a.active,
+.nextra-toc li.active > a,
+.nextra-toc a[class*="x:text-primary"],
+.nextra-toc a[class*="x:bg-primary"] {
+  color: hsl(var(--accent-main-100)) !important;
+  background-color: hsl(var(--accent-main-100) / 0.1) !important;
+  font-weight: 600 !important;
 }
 
+/* Active TOC link - Dark mode */
 .dark .nextra-toc a:hover,
-.dark .nextra-toc a.active {
+.dark .nextra-toc a.active,
+.dark .nextra-toc li.active > a,
+.dark .nextra-toc a[class*="x:text-primary"],
+.dark .nextra-toc a[class*="x:bg-primary"] {
   color: rgb(212, 162, 127) !important; /* accent color */
+  background-color: rgba(212, 162, 127, 0.1) !important;
+  font-weight: 600 !important;
 }
 
 /* ===== CARDS ===== */
